@@ -1,26 +1,26 @@
 #include <iostream>
 #include <iomanip>
+#include <string>
 
 using namespace std;
 
 void renderField(int x, int y);
 bool gameEnded();
+char winnerIs();
 
 char field[3][3] =
 {
-	{ 'X', 'X', 'X' },
-	{ 'X', 'X', 'X' },
-	{ 'X', 'X', 'X' }
+	{ ' ', ' ', ' ' },
+	{ ' ', ' ', ' ' },
+	{ ' ', ' ', ' ' }
 };
 
 int main()
 {
-	field[0][0] = 'X';
-
 	renderField(10, 5);
-	
+
 	bool result = gameEnded();
-	cout << result ? "true" : "false";
+	cout << result;
 	cin.get();
 }
 
@@ -39,10 +39,30 @@ void renderField(int x, int y)
 
 bool gameEnded()
 {
-	bool gameEnd = false;
-	if (*field[0] == 'XXX' || *field[0] == 'OOO') gameEnd = true; 
-	if (*field[1] == 'XXX' || *field[1] == 'OOO') gameEnd = true;
-	if (*field[2] == 'XXX' || *field[2] == 'OOO') gameEnd = true;
+	if (winnerIs() != ' ')
+	{
+		return true;
+	}
+	else {
+		return false;
+	}
+}
 
-	return gameEnd;
+char winnerIs()
+{
+	char winner = ' ';
+
+	// horizontal lines
+	if (string(field[0]).substr(0, 3) == "XXX" || string(field[1]).substr(0, 3) == "XXX" || string(field[2]).substr(0, 3) == "XXX") winner = 'X';
+	if (string(field[0]).substr(0, 3) == "OOO" || string(field[1]).substr(0, 3) == "OOO" || string(field[2]).substr(0, 3) == "OOO") winner = 'O';
+
+	//vertical lines
+	if ((field[0][0] == 'X' && field[1][0] == 'X' && field[2][0] == 'X') || (field[0][1] == 'X' && field[1][1] == 'X' && field[2][1] == 'X') || (field[0][2] == 'X' && field[1][2] == 'X' && field[2][2] == 'X')) winner = 'X';
+	if ((field[0][0] == 'O' && field[1][0] == 'O' && field[2][0] == 'O') || (field[0][1] == 'O' && field[1][1] == 'O' && field[2][1] == 'O') || (field[0][2] == 'O' && field[1][2] == 'O' && field[2][2] == 'O')) winner = 'O';
+
+	//diagonal lines
+	if ((field[0][0] == 'X' && field[1][1] == 'X' && field[2][2] == 'X') || (field[2][0] == 'X' && field[1][1] == 'X' && field[0][2] == 'X')) winner = 'X';
+	if ((field[0][0] == 'O' && field[1][1] == 'O' && field[2][2] == 'O') || (field[2][0] == 'O' && field[1][1] == 'O' && field[0][2] == 'O')) winner = 'O';
+
+	return winner;
 }
